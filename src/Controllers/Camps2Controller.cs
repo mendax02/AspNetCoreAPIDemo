@@ -11,17 +11,16 @@ using Microsoft.AspNetCore.Routing;
 
 namespace CoreCodeCamp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/camps")]
     [ApiController]
-    [ApiVersion("1.0")]
-    [ApiVersion("1.1")]
-    public class CampsController : ControllerBase
+    [ApiVersion("2.0")]
+    public class Camps2Controller : ControllerBase
     {
         private readonly ICampRepository _campRepository;
         private readonly IMapper _mapper;
         private readonly LinkGenerator _linkGenerator;
 
-        public CampsController(ICampRepository campRepository, IMapper mapper, LinkGenerator linkGenerator)
+        public Camps2Controller(ICampRepository campRepository, IMapper mapper, LinkGenerator linkGenerator)
         {
             _campRepository = campRepository;
             _mapper = mapper;
@@ -29,16 +28,19 @@ namespace CoreCodeCamp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<CampModel[]>> Get(bool includeTalks = false)
-        
+        public async Task<IActionResult> Get(bool includeTalks = false)
         {
             try
             {
                 var camps = await _campRepository.GetAllCampsAsync(includeTalks);
 
-                //CampModel[] campModels = _mapper.Map<CampModel[]>(camps);
+                var results = new
+                {
+                    Count = camps.Count(),
+                    Results = _mapper.Map<CampModel[]>(camps)
+                };
 
-                return _mapper.Map<CampModel[]>(camps);
+                return Ok(results);
             }
             catch (Exception ex)
             {
@@ -63,23 +65,6 @@ namespace CoreCodeCamp.Controllers
             }
         }
 
-        [HttpGet("{moniker}")]
-        [MapToApiVersion("1.1")]
-        public async Task<ActionResult<CampModel>> GetV2(string moniker)
-        {
-            try
-            {
-                var camp = await _campRepository.GetCampAsync(moniker,true);
-                if (camp == null) return NotFound();
-                //CampModel campModels = _mapper.Map<CampModel>(camp);
-
-                return Ok(_mapper.Map<CampModel>(camp));
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Cannot fetch Data");
-            }
-        }
 
         [HttpGet("search/{theDate}")]
         public async Task<ActionResult<CampModel[]>> SearchByDate(DateTime theDate, bool includeTalks = false)

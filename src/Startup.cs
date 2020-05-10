@@ -16,8 +16,13 @@ namespace CoreCodeCamp
             services.AddScoped<ICampRepository, CampRepository>();
 
             services.AddAutoMapper(typeof(Startup));
-
-            services.AddMvc()
+            services.AddApiVersioning(opt =>
+            {
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ReportApiVersions = true;
+            });
+            services.AddMvc(opt => opt.EnableEndpointRouting = false)
               .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
