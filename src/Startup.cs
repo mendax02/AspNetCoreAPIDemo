@@ -24,11 +24,11 @@ namespace CoreCodeCamp
                 opt.ReportApiVersions = true;
                 //opt.ApiVersionReader = new QueryStringApiVersionReader("ver");
                 //opt.ApiVersionReader = new HeaderApiVersionReader("X-Version");
-                //opt.ApiVersionReader = ApiVersionReader.Combine(
-                //    new QueryStringApiVersionReader("ver", "version"),
-                //    new HeaderApiVersionReader("X-Version"));
+                opt.ApiVersionReader = ApiVersionReader.Combine(
+                    new QueryStringApiVersionReader("ver", "version"),
+                    new HeaderApiVersionReader("X-Version"));
 
-                opt.ApiVersionReader = new UrlSegmentApiVersionReader();
+               // opt.ApiVersionReader = new UrlSegmentApiVersionReader();
             });
             services.AddMvc(opt => opt.EnableEndpointRouting = false)
               .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
