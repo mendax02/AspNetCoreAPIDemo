@@ -11,10 +11,12 @@ using Microsoft.AspNetCore.Routing;
 
 namespace CoreCodeCamp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
     [ApiVersion("1.1")]
+    [ApiVersion("2.0")]
     public class CampsController : ControllerBase
     {
         private readonly ICampRepository _campRepository;
@@ -30,7 +32,6 @@ namespace CoreCodeCamp.Controllers
 
         [HttpGet]
         public async Task<ActionResult<CampModel[]>> Get(bool includeTalks = false)
-        
         {
             try
             {
