@@ -23,7 +23,10 @@ namespace CoreCodeCamp
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
                 opt.ReportApiVersions = true;
                 //opt.ApiVersionReader = new QueryStringApiVersionReader("ver");
-                opt.ApiVersionReader = new HeaderApiVersionReader("X-Version");
+                //opt.ApiVersionReader = new HeaderApiVersionReader("X-Version");
+                opt.ApiVersionReader = ApiVersionReader.Combine(
+                    new QueryStringApiVersionReader("ver", "version"),
+                    new HeaderApiVersionReader("X-Version"));
             });
             services.AddMvc(opt => opt.EnableEndpointRouting = false)
               .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
