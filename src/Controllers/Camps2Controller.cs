@@ -53,7 +53,7 @@ namespace CoreCodeCamp.Controllers
         {
             try
             {
-                var camp = await _campRepository.GetCampAsync(moniker);
+                var camp = await _campRepository.GetCampAsync(moniker, true);
                 if (camp == null) return NotFound();
                 //CampModel campModels = _mapper.Map<CampModel>(camp);
 
